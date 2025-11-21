@@ -30,18 +30,44 @@ const UserList = () => {
     }
   };
 
+  const downloadData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/download`, {
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "data_pegawai.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="container relative overflow-x-auto bg-white shadow-lg rounded-lg border border-gray-200 p-4">
       <div className="flex items-center justify-between mb-5">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
           Daftar Pegawai
         </h2>
-        <Link
-          to="add"
-          className="bg-indigo-600 text-white hover:bg-indigo-700 font-semibold py-1 px-3 rounded-md transition duration-150 ease-in-out mr-2"
-        >
-          Tambah Data
-        </Link>
+        <div>
+          <button
+            className="bg-green-500 text-white hover:bg-green-600 font-semibold py-1 px-3 rounded-md transition duration-150 ease-in-out mr-2"
+            onClick={downloadData}
+          >
+            Unduh Data
+          </button>
+          <Link
+            to="add"
+            className="bg-indigo-600 text-white hover:bg-indigo-700 font-semibold py-1 px-3 rounded-md transition duration-150 ease-in-out mr-2"
+          >
+            Tambah Data
+          </Link>
+        </div>
       </div>
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
